@@ -2,7 +2,7 @@
 
 __version__ = "0.1.4"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
-__all__ = ["get_compositions", "get_all_stock_codes"]
+__all__ = ["get_compositions", "get_all_stock_codes", "calculate_n225_price"]
 
 import csv
 import datetime
@@ -67,5 +67,14 @@ def get_all_stock_codes():
         for row in csv_obj:
             add_stock = row[2].strip()
             stock_codes.add(add_stock)
-            print(add_stock)
     return stock_codes
+
+
+def calculate_n225_price(date, stock_price_dict):
+    n225_dict = get_compositions(date)
+    sum_ = 0
+
+    for stock_code, minashi in n225_dict["stocks"].items():
+        minashi = eval(minashi)
+        sum_ += stock_price_dict[stock_code] * 50 / minashi
+    return sum_ / n225_dict["josuu"]
