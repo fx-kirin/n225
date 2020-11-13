@@ -1,4 +1,6 @@
 add_parent_path
+jpholiday
 kanilog
+pandas
 pytest
 stdlogging
