@@ -2,7 +2,12 @@
 
 __version__ = "0.1.4"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
-__all__ = ["get_compositions", "get_all_stock_codes", "calculate_n225_price", "get_daily_n225_data_from_nikkei"]
+__all__ = [
+    "get_compositions",
+    "get_all_stock_codes",
+    "calculate_n225_price",
+    "get_daily_n225_data_from_nikkei",
+]
 
 import csv
 import datetime
@@ -10,6 +15,7 @@ import functools
 import os
 import warnings
 from pathlib import Path
+import jpholiday
 
 
 def get_compositions(date):
