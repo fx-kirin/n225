@@ -16,4 +16,4 @@ Get compositions and josuu.
 
 ## Authors
 
-# n225 was written by [fx-kirin](fx.kirin@gmail.com).
+n225 was written by [fx-kirin](fx.kirin@gmail.com).
