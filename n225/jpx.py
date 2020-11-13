@@ -26,7 +26,7 @@ class Sanganichi(jpholiday.registry.OriginalHoliday):
 def is_market_open(date):
     if jpholiday.is_holiday(date):
         return False
-    if date.weekday() < 5:
+    if date.weekday() >= 5:
         return False
     return True
 
@@ -43,14 +43,14 @@ def get_next_business_date(date, days=1):
 
 
 def get_last_business_date(date, days=1):
-    next_bdate = date + datetime.timedelta(days=1)
+    next_bdate = date - datetime.timedelta(days=1)
     count = 0
     while True:
         if is_market_open(date):
             count -= 1
             if days <= count:
                 return next_bdate
-        next_bdate = next_bdate + datetime.timedelta(days=1)
+        next_bdate = next_bdate - datetime.timedelta(days=1)
 
 
 def get_shinagashi_nissu(date):
