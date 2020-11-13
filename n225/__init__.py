@@ -2,12 +2,13 @@
 
 __version__ = "0.1.4"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
-__all__ = ["get_compositions", "get_all_stock_codes", "calculate_n225_price"]
+__all__ = ["get_compositions", "get_all_stock_codes", "calculate_n225_price", "get_daily_n225_data_from_nikkei"]
 
 import csv
 import datetime
 import functools
 import os
+import warnings
 from pathlib import Path
 
 
@@ -78,3 +79,19 @@ def calculate_n225_price(date, stock_price_dict):
         minashi = eval(minashi)
         sum_ += stock_price_dict[stock_code] * 50 / minashi
     return sum_ / n225_dict["josuu"]
+
+
+def get_daily_n225_data_from_nikkei():
+    try:
+        import pandas as pd
+    except ImportError:
+        warnings.warn("You need to install pandas before using this function.")
+        raise
+    nikkei_df = pd.read_csv(
+        "https://indexes.nikkei.co.jp/nkave/historical/nikkei_stock_average_daily_jp.csv",
+        encoding="ms932",
+    )
+    nikkei_df = nikkei_df[:-1]
+    nikkei_df.index = pd.to_datetime(nikkei_df["データ日付"], format="%Y/%m/%d")
+    del nikkei_df["データ日付"]
+    return nikkei_df
