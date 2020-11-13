@@ -35,7 +35,7 @@ def get_next_business_date(date, days=1):
     next_bdate = date + datetime.timedelta(days=1)
     count = 0
     while True:
-        if is_market_open(date):
+        if is_market_open(next_bdate):
             count += 1
             if days <= count:
                 return next_bdate
@@ -46,8 +46,8 @@ def get_last_business_date(date, days=1):
     next_bdate = date - datetime.timedelta(days=1)
     count = 0
     while True:
-        if is_market_open(date):
-            count -= 1
+        if is_market_open(next_bdate):
+            count += 1
             if days <= count:
                 return next_bdate
         next_bdate = next_bdate - datetime.timedelta(days=1)
@@ -59,9 +59,8 @@ def get_shinagashi_nissu(date):
     shinagashi_nissu = 1
     return_date = borrow_date + datetime.timedelta(days=1)
     for _ in range(30):
-        if return_date.weekday() < 5:
-            if not jpholiday.is_holiday(return_date):
-                break
+        if is_market_open(return_date):
+            break
         shinagashi_nissu += 1
         return_date = return_date + datetime.timedelta(days=1)
     else:
