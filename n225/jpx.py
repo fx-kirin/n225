@@ -23,6 +23,16 @@ class Sanganichi(jpholiday.registry.OriginalHoliday):
         return "正月三が日"
 
 
+class Omisoka(jpholiday.registry.OriginalHoliday):
+    def _is_holiday(self, date):
+        if date.month == 12 and date.day == 31:
+            return True
+        return False
+
+    def _is_holiday_name(self, date):
+        return "大晦日"
+
+
 def is_market_open(date):
     if jpholiday.is_holiday(date):
         return False
