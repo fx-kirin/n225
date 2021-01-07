@@ -1,6 +1,6 @@
 """n225 - Get compositions and josuu."""
 
-__version__ = "0.1.17"
+__version__ = "0.1.18"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
 __all__ = [
     "get_compositions",

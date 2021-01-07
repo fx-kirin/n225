@@ -42,7 +42,7 @@ def is_market_open(date):
 
 
 def get_next_business_date(date, days=1):
-    next_bdate = date + datetime.timedelta(days=days)
+    next_bdate = date + datetime.timedelta(days=1)
     count = 0
     while True:
         if is_market_open(next_bdate):
@@ -53,7 +53,7 @@ def get_next_business_date(date, days=1):
 
 
 def get_last_business_date(date, days=1):
-    next_bdate = date - datetime.timedelta(days=days)
+    next_bdate = date - datetime.timedelta(days=1)
     count = 0
     while True:
         if is_market_open(next_bdate):
