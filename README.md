@@ -6,6 +6,12 @@ Get compositions and josuu.
 
 ## Usage
 
+To update n225.csv, execute the command below.
+
+```
+python -m n225
+```
+
 ## Installation
 
 ### Requirements

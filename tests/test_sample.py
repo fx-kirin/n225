@@ -5,8 +5,10 @@
 import datetime
 import logging
 import os
+from pathlib import Path
 
 import kanilog
+import loglevel
 import pytest
 import stdlogging
 from add_parent_path import add_parent_path
@@ -40,7 +42,13 @@ def test_func():
     n225.get_all_stock_codes()
 
 
+def test_download():
+    n225.download_kouseimeigara_pdfs()
+    n225.download_josuu_pdfs()
+    n225.parse_pdfs()
+
+
 if __name__ == "__main__":
     kanilog.setup_logger(logfile='/tmp/%s.log' % (os.path.basename(__file__)), level=logging.INFO)
-
-    pytest.main([__file__, '-k test_', '-s'])
+    loglevel.set_loglevel(Path(__file__).parents[1] / "loglevel.yml")
+    pytest.main([__file__, '-k test_func', '-s'])
