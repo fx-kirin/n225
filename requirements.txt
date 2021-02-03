@@ -1,10 +1,11 @@
 add_parent_path
 jpholiday
 kanilog
-kanirequests
+loglevel
+mojimoji
+numpy
 pandas
-pdfminer
-pdfminer.six
+pdftotext
 pytest
 stdlogging
 tabula
