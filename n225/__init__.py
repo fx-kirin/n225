@@ -21,7 +21,7 @@ from urlpath import URL
 
 from .jpx import get_next_business_date
 
-__version__ = "0.1.19"
+__version__ = "0.1.20"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
 __all__ = [
     "get_compositions",

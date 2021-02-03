@@ -2,7 +2,6 @@ add_parent_path
 jpholiday
 kanilog
 kanirequests
-kanirequests.egg
 pandas
 pdfminer
 pdfminer.six
