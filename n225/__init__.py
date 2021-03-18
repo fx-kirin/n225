@@ -17,11 +17,12 @@ import pandas as pd
 import pdftotext
 import tabula
 from kanirequests import KaniRequests, open_html_in_browser
+from nth_weekday import get_nth_weekday
 from urlpath import URL
 
-from .jpx import get_next_business_date
+from .jpx import get_last_business_date, get_next_business_date
 
-__version__ = "0.1.21"
+__version__ = "0.1.22"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
 __all__ = [
     "get_compositions",
@@ -56,9 +57,9 @@ def _read_init_n225_csv(date=None):
 
 def _get_compositions(year, month, day):
     date = datetime.date(year, month, day)
-    if date < datetime.date(2019, 8, 1):
-        raise NotImplementedError(f"Date must be after 2019-08-01")
-    
+    if date < datetime.date(2019, 7, 1):
+        raise NotImplementedError(f"Date must be after 2019-07-01")
+
     n225_dict = _read_init_n225_csv(date)
 
     csv_path = Path(__file__).parent / "data/n225.csv"
@@ -204,11 +205,13 @@ def download_josuu_pdfs(download_path=None):
             break
         logger.info("Go next page.")
         idx += 1
-        
+
     idx = 1
     while True:
         is_found = False
-        url = f"https://indexes.nikkei.co.jp/nkave/newsroom?evt=&idxtag=00001&page={idx}"
+        url = (
+            f"https://indexes.nikkei.co.jp/nkave/newsroom?evt=&idxtag=00001&page={idx}"
+        )
         logger.info("Opening %s", url)
         result = session.get(url)
         root_path = URL(result.url)
@@ -271,7 +274,13 @@ def parse_pdfs(download_path=None):
                     target_date = datetime.date(doc_date.year + 1, month, day)
                 if jpholiday.is_holiday(target_date):
                     target_date = get_next_business_date(target_date)
-                output_df = output_df.append(pd.DataFrame([[remove, add, minashi]], index=[target_date], columns=["Remove", "Add", "Minashi"]))
+                output_df = output_df.append(
+                    pd.DataFrame(
+                        [[remove, add, minashi]],
+                        index=[target_date],
+                        columns=["Remove", "Add", "Minashi"],
+                    )
+                )
             elif "日経平均株価の銘柄定期入れ替え等について" in pdf_file.name:
                 dfs = tabula.read_pdf(pdf_file)
                 if len(dfs) == 2:
@@ -288,7 +297,13 @@ def parse_pdfs(download_path=None):
                             target_date = datetime.date(doc_date.year + 1, month, day)
                         if jpholiday.is_holiday(target_date):
                             target_date = get_next_business_date(target_date)
-                        output_df = output_df.append(pd.DataFrame([[remove, add, minashi]], index=[target_date], columns=["Remove", "Add", "Minashi"]))
+                        output_df = output_df.append(
+                            pd.DataFrame(
+                                [[remove, add, minashi]],
+                                index=[target_date],
+                                columns=["Remove", "Add", "Minashi"],
+                            )
+                        )
 
                     with pdf_file.open("rb") as f:
                         pdf = pdftotext.PDF(f)
@@ -309,7 +324,13 @@ def parse_pdfs(download_path=None):
                         add = row["コード"]
                         remove = row["コード"]
                         minashi = re.search(r"([0-9/]+)円", row["新みなし額面"]).group(1)
-                        output_df = output_df.append(pd.DataFrame([[remove, add, minashi]], index=[target_date], columns=["Remove", "Add", "Minashi"]))
+                        output_df = output_df.append(
+                            pd.DataFrame(
+                                [[remove, add, minashi]],
+                                index=[target_date],
+                                columns=["Remove", "Add", "Minashi"],
+                            )
+                        )
                 else:
                     logger.warning("Not parsed")
             elif "日経平均株価の銘柄定期入れ替えについて" in pdf_file.name:
@@ -338,7 +359,13 @@ def parse_pdfs(download_path=None):
                             target_date = datetime.date(doc_date.year + 1, month, day)
                         if jpholiday.is_holiday(target_date):
                             target_date = get_next_business_date(target_date)
-                        output_df = output_df.append(pd.DataFrame([[remove, add, minashi]], index=[target_date], columns=["Remove", "Add", "Minashi"]))
+                        output_df = output_df.append(
+                            pd.DataFrame(
+                                [[remove, add, minashi]],
+                                index=[target_date],
+                                columns=["Remove", "Add", "Minashi"],
+                            )
+                        )
                 else:
                     logger.warning("Not parsed")
             else:
@@ -361,3 +388,20 @@ def parse_pdfs(download_path=None):
     output_df.index.name = "Date"
     output_df.sort_index(inplace=True)
     output_df.to_csv(Path(__file__).parent / "data/n225.csv")
+
+
+def get_futures_sq_dates(today):
+    sq_dates = []
+    for year in range(2020, today.year + 2):
+        for month in range(3, 13, 3):
+            sq_date = get_nth_weekday(4, year, month, 1)
+            while True:
+                if not jpholiday.is_holiday(sq_date):
+                    break
+                sq_date = get_last_business_date(sq_date)
+            while True:
+                if not jpholiday.is_holiday(sq_date):
+                    break
+                sq_date = get_last_business_date(sq_date)
+            sq_dates.append(sq_date)
+    return sq_dates
