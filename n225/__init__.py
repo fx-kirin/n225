@@ -29,6 +29,7 @@ __all__ = [
     "get_all_stock_codes",
     "calculate_n225_price",
     "get_daily_n225_data_from_nikkei",
+    "get_futures_sq_dates",
 ]
 
 

@@ -13,6 +13,12 @@ Get compositions and josuu.
 Usage
 -----
 
+To update n225.csv, execute the command below.
+
+.. code-block::
+
+   python -m n225
+
 Installation
 ------------
 
@@ -29,4 +35,3 @@ Authors
 -------
 
 n225 was written by `fx-kirin <fx.kirin@gmail.com>`_.
-=========================================================
