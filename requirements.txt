@@ -1,13 +1,11 @@
-add_parent_path
 jpholiday
 kanilog
-loglevel
 mojimoji
 numpy
 pandas
 pdftotext
-pytest
-stdlogging
 tabula
 tabula_py
 urlpath
+kanirequests
+nth_weekday
