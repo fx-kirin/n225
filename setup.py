@@ -41,6 +41,9 @@ setup(
     packages=find_packages(exclude=("tests",)),
     package_data={'n225': ['data/n225.csv', 'data/initial_n225.csv']},
     install_requires=get_requires(),
+    extras_require={
+        "test":  ["add_parent_path", "loglevel", "pytest", "stdlogging", "PyYAML"],
+    },
     classifiers=[
         "Development Status :: 2 - Pre-Alpha",
         "License :: OSI Approved :: MIT License",
