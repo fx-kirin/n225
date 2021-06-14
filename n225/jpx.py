@@ -87,11 +87,11 @@ def get_stock_zaraba_filter(from_date, to_date, pandas_series):
     for business_day in business_days:
         business_dt = datetime.datetime.fromordinal(business_day.toordinal())
         additional_filter = ((business_dt + timedelta(hours=9)) <= pandas_series.index) & (
-            pandas_series < (business_dt + timedelta(hours=11, minutes=30))
+            pandas_series.index < (business_dt + timedelta(hours=11, minutes=30))
         )
         additional_filter |= (
             (business_dt + timedelta(hours=12, minutes=30)) <= pandas_series.index
-        ) & (pandas_series < (business_dt + timedelta(hours=15)))
+        ) & (pandas_series.index < (business_dt + timedelta(hours=15)))
         if zaraba_filter is None:
             zaraba_filter = additional_filter
         else:

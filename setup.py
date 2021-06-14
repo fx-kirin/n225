@@ -31,7 +31,7 @@ def get_requires():
 
 setup(
     name="n225",
-    version="0.1.24",
+    version="0.1.25",
     url="https://github.com/fx-kirin/n225",
     license="MIT",
     author="fx-kirin",
