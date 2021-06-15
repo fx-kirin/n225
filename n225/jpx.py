@@ -3,6 +3,7 @@ from datetime import timedelta
 
 import dateutil.parser
 import jpholiday
+import numpy as np
 
 
 class ExchangeClosed(jpholiday.registry.OriginalHoliday):
@@ -80,18 +81,21 @@ def get_shinagashi_nissu(date):
     return shinagashi_nissu
 
 
-def get_stock_zaraba_filter(from_date, to_date, pandas_series):
+def get_stock_zaraba_filter(from_date, to_date, numpy_datetime64):
+    if not isinstance(numpy_datetime64, np.datetime64):
+        ValueError("3rd argument numpy_datetime64 is not np.datetime64")
     from_date, to_date = _parse_date_inputs(from_date, to_date)
     business_days = get_business_days(from_date, to_date)
     zaraba_filter = None
     for business_day in business_days:
         business_dt = datetime.datetime.fromordinal(business_day.toordinal())
-        additional_filter = ((business_dt + timedelta(hours=9)) <= pandas_series.index) & (
-            pandas_series.index < (business_dt + timedelta(hours=11, minutes=30))
+        businnes_dt = np.datetime64(business_dt)
+        additional_filter = ((business_dt + np.timedelta64(9, "h")) <= numpy_datetime64) & (
+            numpy_datetime64 < (business_dt + np.timedelta64(11*60 + 30, "m"))
         )
         additional_filter |= (
-            (business_dt + timedelta(hours=12, minutes=30)) <= pandas_series.index
-        ) & (pandas_series.index < (business_dt + timedelta(hours=15)))
+            (business_dt + np.timedelta64(12*60 + 30, "m")) <= numpy_datetime64
+        ) & (numpy_datetime64 < (business_dt + np.timedelta64(15, "h")))
         if zaraba_filter is None:
             zaraba_filter = additional_filter
         else:

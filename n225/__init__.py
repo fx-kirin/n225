@@ -22,7 +22,7 @@ from urlpath import URL
 
 from .jpx import get_last_business_date, get_next_business_date
 
-__version__ = "0.1.22"
+__version__ = "0.1.26"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
 __all__ = [
     "get_compositions",
