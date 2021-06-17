@@ -89,12 +89,12 @@ def get_stock_zaraba_filter(from_date, to_date, numpy_datetime64):
     zaraba_filter = None
     for business_day in business_days:
         business_dt = datetime.datetime.fromordinal(business_day.toordinal())
-        businnes_dt = np.datetime64(business_dt)
-        additional_filter = ((business_dt + np.timedelta64(9, "h")) <= numpy_datetime64) & (
+        business_dt = np.datetime64(business_dt)
+        additional_filter = (numpy_datetime64 >= (business_dt + np.timedelta64(9, "h"))) & (
             numpy_datetime64 < (business_dt + np.timedelta64(11*60 + 30, "m"))
         )
         additional_filter |= (
-            (business_dt + np.timedelta64(12*60 + 30, "m")) <= numpy_datetime64
+            numpy_datetime64 >= (business_dt + np.timedelta64(12*60 + 30, "m"))
         ) & (numpy_datetime64 < (business_dt + np.timedelta64(15, "h")))
         if zaraba_filter is None:
             zaraba_filter = additional_filter
