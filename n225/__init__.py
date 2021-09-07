@@ -283,14 +283,16 @@ def parse_pdfs(download_path=None):
                     )
                 )
             elif "日経平均株価の銘柄定期入れ替え等について" in pdf_file.name:
-                dfs = tabula.read_pdf(pdf_file)
+                dfs = tabula.read_pdf(pdf_file, pages="all")
                 if len(dfs) == 2:
                     df = dfs[0]
+                    df["実施日"] = df["実施日"].ffill().bfill()
+                    df = df[~(df["コード"].isna() & df["採用銘柄"].isna() & df["コード.1"].isna() & df["コード.1"].isna())]
                     for idx, row in df.iterrows():
                         add = row["コード"]
                         remove = row["コード.1"]
-                        minashi = re.search(r"\(([0-9/]+)\)", row["採用銘柄"]).group(1)
-                        date = re.search("([０-９0-9]+)月([０-９0-9]+)日", row["実施日"])
+                        minashi = re.search(r"\(([\.0-9/]+)\)", row["採用銘柄"]).group(1)
+                        date = re.search("([０-９0-9]+)月([ ０-９0-9]+)日", row["実施日"])
                         month = int(mojimoji.zen_to_han(date.group(1)))
                         day = int(mojimoji.zen_to_han(date.group(2)))
                         target_date = datetime.date(doc_date.year, month, day)
@@ -311,7 +313,7 @@ def parse_pdfs(download_path=None):
                     text = "\n".join(list(pdf))
                     span = re.search(r"．.*株式", text).span()
                     content = text[span[1]:]
-                    date = re.search("([０-９0-9]+)月([０-９0-9]+)日", content)
+                    date = re.search("([ ０-９0-9]+)月([ ０-９0-9]+)日", content)
                     month = int(mojimoji.zen_to_han(date.group(1)))
                     day = int(mojimoji.zen_to_han(date.group(2)))
                     target_date = datetime.date(doc_date.year, month, day)
@@ -335,7 +337,7 @@ def parse_pdfs(download_path=None):
                 else:
                     logger.warning("Not parsed")
             elif "日経平均株価の銘柄定期入れ替えについて" in pdf_file.name:
-                dfs = tabula.read_pdf(pdf_file)
+                dfs = tabula.read_pdf(pdf_file, pages="all")
                 if len(dfs) == 1:
                     df = dfs[0]
                     df = df.dropna(axis=1)
