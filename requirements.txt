@@ -4,7 +4,6 @@ mojimoji
 numpy
 pandas
 pdftotext
-tabula
 tabula_py
 urlpath
 kanirequests
