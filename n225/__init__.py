@@ -27,7 +27,7 @@ __author__ = "fx-kirin <fx.kirin@gmail.com>"
 __all__ = [
     "get_compositions",
     "get_all_stock_codes",
-    "calcurate_n225_price",
+    "calculate_n225_price",
     "get_daily_n225_data_from_nikkei",
     "get_futures_sq_dates",
 ]
@@ -98,7 +98,7 @@ def get_all_stock_codes():
     return stock_codes
 
 
-def calcurate_n225_price(date, stock_price_dict):
+def calculate_n225_price(date, stock_price_dict):
     n225_dict = get_compositions(date)
     sum_ = 0
 
