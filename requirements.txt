@@ -1,4 +1,4 @@
-jpholiday
+jpholiday>1.0.0
 kanilog
 mojimoji
 numpy

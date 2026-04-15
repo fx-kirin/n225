@@ -48,7 +48,12 @@ def test_download():
     n225.parse_pdfs()
 
 
+def test_omisoka():
+    today = datetime.date(2020, 1, 3)
+    assert n225.is_holiday(today)
+    assert n225.is_holiday_name(today) == "正月三が日"
+
 if __name__ == "__main__":
     kanilog.setup_logger(logfile='/tmp/%s.log' % (os.path.basename(__file__)), level=logging.INFO)
     loglevel.set_loglevel(Path(__file__).parents[1] / "loglevel.yml")
-    pytest.main([__file__, '-k test_func', '-s'])
+    pytest.main([__file__, '-k test_omisoka', '-s'])

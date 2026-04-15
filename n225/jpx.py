@@ -5,34 +5,39 @@ import dateutil.parser
 import jpholiday
 
 
-class ExchangeClosed(jpholiday.registry.OriginalHoliday):
-    def _is_holiday(self, date):
+class ExchangeClosed(jpholiday.OriginalHolidayCheckerInterface):
+    def is_holiday(self, date):
         if date.year == 2020 and date.month == 10 and date.day == 1:
             return True
         return False
 
-    def _is_holiday_name(self, date):
+    def holiday_name(self, date):
         return "障害発生"
 
 
-class Sanganichi(jpholiday.registry.OriginalHoliday):
-    def _is_holiday(self, date):
+class Sanganichi(jpholiday.OriginalHolidayCheckerInterface):
+    def is_holiday(self, date):
         if date.month == 1 and date.day <= 3:
             return True
         return False
 
-    def _is_holiday_name(self, date):
+    def holiday_name(self, date):
         return "正月三が日"
 
 
-class Omisoka(jpholiday.registry.OriginalHoliday):
-    def _is_holiday(self, date):
+class Omisoka(jpholiday.OriginalHolidayCheckerInterface):
+    def is_holiday(self, date):
         if date.month == 12 and date.day == 31:
             return True
         return False
 
-    def _is_holiday_name(self, date):
+    def holiday_name(self, date):
         return "大晦日"
+
+
+jpholiday.register(ExchangeClosed())
+jpholiday.register(Sanganichi())
+jpholiday.register(Omisoka())
 
 
 def is_market_open(date):

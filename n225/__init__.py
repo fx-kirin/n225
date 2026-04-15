@@ -19,10 +19,11 @@ import tabula
 from kanirequests import KaniRequests, open_html_in_browser
 from nth_weekday import get_nth_weekday
 from urlpath import URL
+from jpholiday import is_holiday, is_holiday_name
 
 from .jpx import get_last_business_date, get_next_business_date
 
-__version__ = "0.1.22"
+__version__ = "0.2.0"
 __author__ = "fx-kirin <fx.kirin@gmail.com>"
 __all__ = [
     "get_compositions",
